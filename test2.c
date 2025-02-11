@@ -55,32 +55,33 @@ int main (int ac, char **av)
 	}
 }
 
-	if (ac < 2)
-	{
-		perror("Nombres darguments invalide !");
-		return 0;
-	}
+// 	if (ac < 2)
+// 	{
+// 		perror("Nombres darguments invalide !");
+// 		return 0;
+// 	}
 
-	char	*path = "/bin/ls";
-	char	**args = malloc(sizeof(char *) * ac);
-	if (!args)
-		return (1);
-	int		i = 1;
+// 	char	*path = "/bin/ls";
+// 	char	**args = malloc(sizeof(char *) * ac);
+// 	if (!args)
+// 		return (1);
+// 	int		i = 1;
 
-	while (av[i])
-	{
-		args[i - 1] = av[i];
-		i++;
-	}
-	args[i - 1] = NULL;
-	char	*env[] = {NULL};
-	i = 0;
+// 	while (av[i])
+// 	{
+// 		args[i - 1] = av[i];
+// 		i++;
+// 	}
+// 	args[i - 1] = NULL;
+// 	char	*env[] = {NULL};
+// 	i = 0;
 
-	if (execve(path, args, env) == -1)
-	{
-		perror("execve failed");
-		return 1;
-	}
-	printf("si execve reussi pas print ici \n");
-	free (args);
-	return (0);
+// 	if (execve(path, args, env) == -1)
+// 	{
+// 		perror("execve failed");
+// 		return 1;
+// 	}
+// 	printf("si execve reussi pas print ici \n");
+// 	free (args);
+// 	return (0);
+// }
