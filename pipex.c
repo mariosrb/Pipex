@@ -34,23 +34,24 @@ int main (int ac, char **av)
 	{
 		// process enfant
 		char *receive = malloc(100);
-		int	file = open("file.txt", O_WRONLY | O_CREAT, 0777);
-		if (file == -1)
-		{
-			perror("Erreur ouverture file.txt");
-			return (1);
-		}
-		dup2(file, 1);
+		char *args[] = {"ls", "-l", NULL};
+		char *env[] = {NULL};
+		int file = open("file.txt", O_WRONLY | O_CREAT, 0777);
+
+		dup2(file, STDOUT_FILENO);
 		close(pipefd[1]);
 		read(pipefd[0], &receive, sizeof(receive));
-		printf("Le message que l'enfant a recu :\n%s\n", receive);
+		if (execve("/bin/ls", args, env) == -1)
+		{
+			perror("Lexecution a fail !");
+			return (1);
+		}
 		close(pipefd[0]);
-		close(file);
 	}
 	else
 	{
 		// process parent
-		char *envoyer = "Hello world";
+		char *envoyer = "ls -l";
 		close(pipefd[0]);
 		write(pipefd[1], &envoyer, ft_strlen(envoyer) + 1);
 		close(pipefd[1]);
