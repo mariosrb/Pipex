@@ -9,7 +9,7 @@
 #include <time.h>
 
 
-#include "./libft/libft.h"
+#include "include/pipex.h"
 
 void	free_matrice(char **strs)
 {
