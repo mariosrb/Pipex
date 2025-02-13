@@ -18,6 +18,7 @@ int main (int ac, char **av, char **env)
 	int		id1;
 	int		id2;
 	int		file;
+	char	*tst[] = {"wc", "-l", NULL};
 
 	cmd = ft_split(av[1], ' ');
 	if (!cmd)
@@ -62,17 +63,17 @@ int main (int ac, char **av, char **env)
 		}	
 	}
 
-	free(cmd_path);
-	free_matrice(cmd);
-	cmd = ft_split(av[2], ' ');
-	if (!cmd)
-		return (1);
-	cmd_path = find_path(cmd[0], env);
-	if (!cmd_path)
-	{
-		free_matrice(cmd);
-		return (1);
-	}
+	// free(cmd_path);
+	// free_matrice(cmd);
+	// cmd = ft_split(av[2], ' ');
+	// if (!cmd)
+	// 	return (1);
+	// cmd_path = find_path(cmd[0], env);
+	// if (!cmd_path)
+	// {
+	// 	free_matrice(cmd);
+	// 	return (1);
+	// }
 	
 	id2 = fork();
 	if (id2 < 0)
@@ -90,7 +91,8 @@ int main (int ac, char **av, char **env)
 			close(pipefd[0]);
 			exit(EXIT_FAILURE);	
 		}
-		if (execve(cmd_path, cmd, env) == -1)
+		close(pipefd[0]);
+		if (execve(cmd_path, tst, env) == -1)
 		{
 			perror("Erreur dans l'execution de la commande");
 			free(cmd_path);
