@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipex.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 14:09:38 by mdodevsk          #+#    #+#             */
+/*   Updated: 2025/02/13 17:37:38 by mdodevsk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -8,76 +20,71 @@
 #include <fcntl.h>
 #include <time.h>
 
+// "Créez un programme qui :
+
+/*Prend deux arguments : 
+1 -- > une commande (comme 'ls -l') 
+2 -- > un fichier de sortie
+Trouve le path complet de la commande avec votre nouvelle fonction
+Exécute la commande avec execve et redirige la sortie vers le fichier"*/
 
 #include "include/pipex.h"
 
-void	free_matrice(char **strs)
+int main (int ac, char **av, char** env)
 {
-	int	i = 0;
-	while (strs[i])
-	{
-		free(strs[i]);
-		i++;
-	}
-	free(strs);
-}
-
-int main (int ac, char **av)
-{
-	// int 	pipefd[2];
-	char	**commande = ft_split(av[1], ' ');
-	if (!commande)
+	char	**cmd;
+	char	*cmd_path;
+	//int 	pipefd[2];
+	int		id1;
+	int		file;
+	
+	///////////////////ON CHERCHER LE PATH///////////////////////////
+	cmd = ft_split(av[1], ' ');
+	if (!cmd)
 		return (1);
-	// pipefd[0]: lecture
-	// pipefd[1]: ecriture
-
-	int i = 1;
-
-	if (ac < 3)
+	cmd_path = find_path(cmd[0], env);
+	if (!cmd_path)
 	{
-		perror("Nombre d'arguments invalide!");
+		free_matrice(cmd);
 		return (1);
 	}
-
-	// if (pipe(pipefd) == -1)
-	// {
-	// 	perror("Erreur creation du pipe !");
-	// 	return (1);
-	// }
-
-	int pid = fork();
-	if (pid == -1)
+	
+	id1 = fork();
+	if (id1 < 0)
 	{
-		perror ("Erreur fork!");
+		free_matrice(cmd);
+		free(cmd_path);
 		return (1);
 	}
-
-	if (pid == 0)
+	if (id1 == 0)
 	{
-		// process enfant
-		// char *receive = malloc(100);
-		char *env[] = {NULL};
-		int file = open(av[2], O_WRONLY | O_CREAT, 0777);
-
-		dup2(file, STDOUT_FILENO);
-		// close(pipefd[1]);
-		// read(pipefd[0], receive, sizeof(receive));
-		if (execve("/bin/ls", commande, env) == -1)
+		file = open(av[2], O_WRONLY | O_CREAT | O_TRUNC, 0777);
+		if (file == -1)
 		{
-			perror("Lexecution a fail !");
-			return (1);
+			perror("Erreur lors de l'ouverture du ficher");
+			exit(EXIT_FAILURE);
 		}
-		// close(pipefd[0]);
+		if (dup2(file, STDOUT_FILENO) == -1)
+		{
+			perror("Erreur lors de la redirection");
+			close(file);
+			exit(EXIT_FAILURE);
+		}
+		close(file);
+		if (execve(cmd_path, cmd, env) == -1)
+		{
+			perror("Erreur dans l'execution de la commande");
+			free(cmd_path);
+			free_matrice(cmd);
+			exit(EXIT_FAILURE);
+		}
 	}
 	else
 	{
-		// process parent
-		char *envoyer = "ls -l";
-		// close(pipefd[0]);
-		// write(pipefd[1], &envoyer, ft_strlen(envoyer) + 1);
-		// close(pipefd[1]);
-		wait(NULL);
+		int	status;
+		waitpid(id1, &status, 0);
 	}
-	free_matrice(commande);
+	free_matrice(cmd);
+	free(cmd_path);
 	return (0);
 }

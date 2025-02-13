@@ -8,11 +8,12 @@
 # include <time.h>
 
 // parsing
+char	*find_path(char *cmd, char **env);
 
 // exec
 
 // utils
 void	free_matrice(char **strs);
-
+void	ft_print(char **strs);
 
 #endif

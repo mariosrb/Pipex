@@ -1,5 +1,16 @@
-#include "include/pipex.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   find_path.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/13 14:09:35 by mdodevsk          #+#    #+#             */
+/*   Updated: 2025/02/13 15:48:52 by mdodevsk         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
+#include "include/pipex.h"
 
 void	ft_print(char **strs)
 {
@@ -64,57 +75,18 @@ char	*find_path(char *cmd, char **env)
 	return (NULL);
 }
 
-int main(int ac, char **av, char **env)
-{
-	char *cs;
-	cs = find_path("ls", env);
-	printf("%s\n", cs);
-	free(cs);
-	return (0);
-}
+// int main (int argc, char **argv, char **env)
+// {
+// 	char	**cmd;
+// 	char	*cmd_path;
 
-int main (int argc, char **argv, char **env)
-{
-	int		i;
-	int		y;
-	char	**all_path;
-	char	**commande;
-
-	// isoler la commande 
-	commande = ft_split(argv[1], ' ');
-	if (!commande)
-		return (1);
-
-	// trouver le chemin et le fusionner avec la commande 
-	i = 0;
-	y = 0;
-	while (ft_strncmp(env[i], "PATH=", 5) != 0)
-		i++;
-	all_path = ft_split(env[i], ':');
-	if (!all_path)
-		return (1);
-	while (all_path[y])
-	{
-		char *tmp1 = all_path[y];
-		all_path[y] = ft_strjoin(all_path[y], "/");
-		free(tmp1);
-
-		char *tmp2 = all_path[y];
-		all_path[y] = ft_strjoin(all_path[y], commande[0]);
-		free(tmp2);
-		y++;
-	}
-
-	y = 0;
-	while (access(all_path[y], F_OK) != 0)
-		y++;
-	if (!all_path[y])
-	{
-		perror("Commande non trouvee\n");
-		exit(EXIT_FAILURE);
-	}
-	printf("\nle chemin est : %s\n", all_path[y]);
-	free_matrice(commande);
-	free_matrice(all_path);
-	return (0);
-}
+// 	// isoler la commande 
+// 	cmd = ft_split(argv[1], ' ');
+// 	if (!cmd)
+// 		return (1);
+// 	cmd_path = find_path(cmd[0], env);
+// 	printf("\nle chemin est : %s\n", cmd_path);
+// 	free_matrice(cmd);
+// 	free(cmd_path);
+// 	return (0);
+// }
