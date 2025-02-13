@@ -7,4 +7,12 @@
 # include <fcntl.h>
 # include <time.h>
 
+// parsing
+
+// exec
+
+// utils
+void	free_matrice(char **strs);
+
+
 #endif
