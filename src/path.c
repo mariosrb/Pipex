@@ -1,16 +1,18 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   find_path.c                                        :+:      :+:    :+:   */
+/*   path.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/13 14:09:35 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/13 15:48:52 by mdodevsk         ###   ########.fr       */
+/*   Created: 2025/02/14 10:28:22 by mdodevsk          #+#    #+#             */
+/*   Updated: 2025/02/14 14:30:05 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "include/pipex.h"
+#include "../include/pipex.h"
+
+// void	init_cmd(char *cmd_str)
 
 void	ft_print(char **strs)
 {
@@ -74,19 +76,3 @@ char	*find_path(char *cmd, char **env)
 	free_matrice(paths);
 	return (NULL);
 }
-
-// int main (int argc, char **argv, char **env)
-// {
-// 	char	**cmd;
-// 	char	*cmd_path;
-
-// 	// isoler la commande 
-// 	cmd = ft_split(argv[1], ' ');
-// 	if (!cmd)
-// 		return (1);
-// 	cmd_path = find_path(cmd[0], env);
-// 	printf("\nle chemin est : %s\n", cmd_path);
-// 	free_matrice(cmd);
-// 	free(cmd_path);
-// 	return (0);
-// }

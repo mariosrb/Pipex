@@ -23,7 +23,7 @@
 
 typedef struct s_stack_node
 {
-	int					content;
+	void				*content;
 	int					cost;
 	int					index;
 	bool				median;
