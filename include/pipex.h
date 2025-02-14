@@ -28,6 +28,7 @@ int		check_files(char *infile, char *outfile, t_pipex *pipex);
 
 // exec
 
+
 // utils
 void	free_matrice(char **strs);
 void	free_pipex(t_pipex *pipex);
