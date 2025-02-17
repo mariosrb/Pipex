@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/17 15:19:08 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/17 15:34:48 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,28 +96,21 @@ int	main(int ac, char **av, char **env)
 	int		id1;
 	int		id2;
 	
-	setup_pipex(&pipex, ac, av, env);
+	if (setup_pipex(&pipex, ac, av, env))
+		return (1);
+		
 	id1 = fork();
 	if (id1 < 0)
-	{
-		perror("Error fork");
-		free_pipex(&pipex);
-		return (1);
-	}
+		return (free_pipex(&pipex), perror("Fork failed"), 1);
 	if (id1 == 0)
-	{
 		first_child(&pipex);
-	}
+		
 	id2 = fork();
 	if (id2 < 0)
-	{
-		free_pipex(&pipex);
-		return (1);
-	}	
+		return (free_pipex(&pipex), perror("Fork failed"), 1);
 	if (id2 == 0)
-	{
 		second_child(&pipex);
-	}
+		
 	parent_cleanup(&pipex, id1, id2);
 	return (0);
 }
