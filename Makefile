@@ -6,13 +6,13 @@
 #    By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/14 10:31:08 by mdodevsk          #+#    #+#              #
-#    Updated: 2025/02/14 17:19:59 by mdodevsk         ###   ########.fr        #
+#    Updated: 2025/02/17 14:04:46 by mdodevsk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = gcc -g3
 
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -Werror
 
 LIBFT_DIR = ./libft/libft.a
 
