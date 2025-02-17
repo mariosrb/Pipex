@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/17 12:09:46 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/17 13:50:15 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,11 @@
 
 int	init_cmd(t_pipex *pipex, char *cmd1, char *cmd2)
 {
+	pipex->pipe_fd[0] = -1;
+	pipex->pipe_fd[1] = -1;
 	pipex->cmd1_args = ft_split(cmd1, ' ');
 	pipex->cmd2_args = ft_split(cmd2, ' ');
-	if (!pipex->cmd1_args || !pipex->cmd2_args)
+	if(!pipex->cmd1_args || !pipex->cmd2_args)
 	{
 		if (pipex->cmd1_args)
 			free_matrice(pipex->cmd1_args);
@@ -30,7 +32,7 @@ int	init_cmd(t_pipex *pipex, char *cmd1, char *cmd2)
 	{
 		free_matrice(pipex->cmd1_args);
 		free_matrice(pipex->cmd2_args);
-		if (pipex->cmd1_path)
+		if(pipex->cmd1_path)
 			free(pipex->cmd1_path);
 		if(pipex->cmd2_path)
 			free(pipex->cmd2_path);
@@ -53,7 +55,10 @@ int	main(int ac, char **av, char **env)
 		return (1);
 	pipex.env = env;
 	if (init_cmd(&pipex, av[2], av[3]))
+	{
+		free_pipex(&pipex);
 		return (1);
+	}
 	if (pipe(pipex.pipe_fd) == -1)
 	{
 		perror("Pipe creation failed");
@@ -72,20 +77,23 @@ int	main(int ac, char **av, char **env)
 		close(pipex.pipe_fd[0]);
 		if (dup2(pipex.infile, STDIN_FILENO) == -1)
 		{
-			perror("Erreur lors de la redirection");
 			close(pipex.pipe_fd[1]);
+			perror("Error redirection");
+			free_pipex(&pipex);
 			exit(EXIT_FAILURE);
 		}
 		if (dup2(pipex.pipe_fd[1], STDOUT_FILENO) == -1)
 		{
-			perror("Erreur lors de la redirection");
 			close(pipex.pipe_fd[1]);
+			perror("Error redirection");
+			free_pipex(&pipex);
 			exit(EXIT_FAILURE);
 		}
 		close(pipex.pipe_fd[1]);
 		if (execve(pipex.cmd1_path, pipex.cmd1_args, env) == -1)
 		{
-			perror("Erreur lors de l'execution de la commande");
+			perror("Error while executinf first command");
+			free_pipex(&pipex);
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -101,19 +109,23 @@ int	main(int ac, char **av, char **env)
 		close(pipex.pipe_fd[1]);
 		if (dup2(pipex.pipe_fd[0], STDIN_FILENO) == -1)
 		{
-			//vori sil faut fermer les piefd
-			perror("Erreur lors de la rediretion");
+			close(pipex.pipe_fd[0]);
+			perror("Error redirection");
 			free_pipex(&pipex);
+			exit(EXIT_FAILURE);
 		}
 		if (dup2(pipex.outfile, STDOUT_FILENO) == -1)
 		{
-			//voir fermer pipefd
-			perror("Erreur lors de la redirection");
+			close(pipex.pipe_fd[0]);
+			perror("Error redirection");
+			free_pipex(&pipex);
 			exit(EXIT_FAILURE);
 		}
+		close(pipex.pipe_fd[0]);
 		if (execve(pipex.cmd2_path, pipex.cmd2_args, env) == -1)
 		{
-			perror("Erreur lors de l'execution de la 2eme commande");
+			perror("Error while executing second command");
+			free_pipex(&pipex);
 			exit(EXIT_FAILURE);
 		}
 	}
