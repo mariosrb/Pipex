@@ -6,7 +6,7 @@
 #    By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/14 10:31:08 by mdodevsk          #+#    #+#              #
-#    Updated: 2025/02/17 14:04:46 by mdodevsk         ###   ########.fr        #
+#    Updated: 2025/02/17 15:19:40 by mdodevsk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,6 +39,5 @@ clean:
 
 fclean: clean
 	rm -f $(NAME)
-	
 
 re: flcean clean

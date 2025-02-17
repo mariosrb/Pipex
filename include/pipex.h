@@ -29,8 +29,9 @@ int		check_files(char *infile, char *outfile, t_pipex *pipex);
 
 // exec
 
-
 // utils
+int		init_cmd(t_pipex *pipex, char *cmd1, char *cmd2);
+void	parent_cleanup(t_pipex *pipex, int id1, int id2)
 void	free_matrice(char **strs);
 void	free_pipex(t_pipex *pipex);
 void	ft_print(char **strs);
