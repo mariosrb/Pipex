@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:59:50 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/14 14:11:51 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/17 11:12:40 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	check_files(char *infile, char *outfile, t_pipex *pipex)
 	if (pipex->infile == -1)
 		perror("Error opening infile");
 	pipex->outfile = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (pipex->infile == -1)
+	if (pipex->outfile == -1)
 		perror("Error opening outfile");
 	if (pipex->infile == -1 || pipex->outfile == -1)
 		return (1);
