@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:59:50 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/17 11:12:40 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:46:02 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,3 +35,26 @@ int	check_files(char *infile, char *outfile, t_pipex *pipex)
 	return (0);
 }
 
+char	*check_direct_path(char *cmd)
+{
+	char	*new_cmd;
+	char	*path;
+
+	new_cmd = cmd;
+	while (*new_cmd)
+	{
+		if (*new_cmd == '/')
+		{
+			if (access(cmd, F_OK | X_OK) == 0)
+			{
+				path = ft_strdup(cmd);
+				if (!path)
+					return (NULL);
+				return (path);
+			}
+			return (NULL);
+		}
+		new_cmd++;
+	}
+	return (NULL);
+}

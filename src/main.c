@@ -6,14 +6,13 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/17 15:34:48 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/18 10:45:54 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-
-int setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
+int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 {
 	if (!env || !*env)
 		return (1);
@@ -95,23 +94,19 @@ int	main(int ac, char **av, char **env)
 	t_pipex	pipex;
 	int		id1;
 	int		id2;
-	
+
 	if (setup_pipex(&pipex, ac, av, env))
 		return (1);
-		
 	id1 = fork();
 	if (id1 < 0)
 		return (free_pipex(&pipex), perror("Fork failed"), 1);
 	if (id1 == 0)
 		first_child(&pipex);
-		
 	id2 = fork();
 	if (id2 < 0)
 		return (free_pipex(&pipex), perror("Fork failed"), 1);
 	if (id2 == 0)
 		second_child(&pipex);
-		
 	parent_cleanup(&pipex, id1, id2);
 	return (0);
 }
-
