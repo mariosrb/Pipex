@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/18 10:45:54 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:06:50 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,56 +37,60 @@ int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 
 int	first_child(t_pipex *pipex)
 {
+	int	error_code;
+
 	close(pipex->pipe_fd[0]);
 	if (dup2(pipex->infile, STDIN_FILENO) == -1)
 	{
 		close(pipex->pipe_fd[1]);
-		perror("Error redirection");
 		free_pipex(pipex);
-		exit(EXIT_FAILURE);
+		exit(ERR_GENERAL);
 	}
 	if (dup2(pipex->pipe_fd[1], STDOUT_FILENO) == -1)
 	{
 		close(pipex->pipe_fd[1]);
-		perror("Error redirection");
 		free_pipex(pipex);
-		exit(EXIT_FAILURE);
+		exit(ERR_GENERAL);
 	}
 	close(pipex->pipe_fd[1]);
-	if (execve(pipex->cmd1_path, pipex->cmd1_args, pipex->env) == -1)
+	error_code = check_cmd_errors(pipex->cmd1_path, pipex->cmd1_args[0]);
+	if (error_code != 0)
 	{
-		perror("Error while execut in first command");
 		free_pipex(pipex);
-		exit(EXIT_FAILURE);
+		exit(ERR_GENERAL);
 	}
-	return (0);
+	execve(pipex->cmd1_path, pipex->cmd1_args, pipex->env);
+	free_pipex(pipex);
+	exit(ERR_GENERAL);
 }
 
 int	second_child(t_pipex *pipex)
 {
+	int	error_code;
+
 	close(pipex->pipe_fd[1]);
 	if (dup2(pipex->pipe_fd[0], STDIN_FILENO) == -1)
 	{
 		close(pipex->pipe_fd[0]);
-		perror("Error redirection");
 		free_pipex(pipex);
-		exit(EXIT_FAILURE);
+		exit(ERR_GENERAL);
 	}
 	if (dup2(pipex->outfile, STDOUT_FILENO) == -1)
 	{
 		close(pipex->pipe_fd[0]);
-		perror("Error redirection");
 		free_pipex(pipex);
-		exit(EXIT_FAILURE);
+		exit(ERR_GENERAL);
 	}
 	close(pipex->pipe_fd[0]);
-	if (execve(pipex->cmd2_path, pipex->cmd2_args, pipex->env) == -1)
+	error_code = check_cmd_errors(pipex->cmd2_path, pipex->cmd2_args[0]);
+	if (error_code != 0)
 	{
-		perror("Error while executing second command");
 		free_pipex(pipex);
-		exit(EXIT_FAILURE);
+		exit(ERR_GENERAL);
 	}
-	return (0);
+	execve(pipex->cmd2_path, pipex->cmd2_args, pipex->env);
+	free_pipex(pipex);
+	exit(ERR_GENERAL);
 }
 
 int	main(int ac, char **av, char **env)
@@ -107,6 +111,5 @@ int	main(int ac, char **av, char **env)
 		return (free_pipex(&pipex), perror("Fork failed"), 1);
 	if (id2 == 0)
 		second_child(&pipex);
-	parent_cleanup(&pipex, id1, id2);
-	return (0);
+	return (parent_cleanup(&pipex, id1, id2));
 }

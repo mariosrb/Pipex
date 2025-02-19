@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:24 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/18 10:40:54 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:06:01 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,13 +40,18 @@ int	init_cmd(t_pipex *pipex, char *cmd1, char *cmd2)
 	return (0);
 }
 
-void	parent_cleanup(t_pipex *pipex, int id1, int id2)
+int	parent_cleanup(t_pipex *pipex, int id1, int id2)
 {
+	int	status;
+
 	close(pipex->pipe_fd[0]);
 	close(pipex->pipe_fd[1]);
 	waitpid(id1, NULL, 0);
-	waitpid(id2, NULL, 0);
+	waitpid(id2, &status, 0);
 	free_pipex(pipex);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (ERR_GENERAL);
 }
 
 void	free_cleanup(t_pipex *pipex)

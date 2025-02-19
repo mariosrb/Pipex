@@ -6,7 +6,7 @@
 #    By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/02/14 10:31:08 by mdodevsk          #+#    #+#              #
-#    Updated: 2025/02/18 15:18:57 by mdodevsk         ###   ########.fr        #
+#    Updated: 2025/02/19 12:41:22 by mdodevsk         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 LIBFT_DIR = ./libft/libft.a
 
-SRCS = ./src/main.c ./src/path.c ./src/utils.c ./src/check.c
+SRCS = ./src/main.c ./src/path.c ./src/utils.c ./src/check.c ./src/error.c
 
 OBJS = $(SRCS:.c=.o)
 

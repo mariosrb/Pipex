@@ -6,35 +6,11 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:22 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/18 10:41:22 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/19 13:01:11 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-
-// void	init_cmd(char *cmd_str)
-
-void	ft_print(char **strs)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	j = 0;
-	while (strs[i] != NULL)
-	{
-		while (strs[i][j])
-		{
-			write (1, &strs[i][j], 1);
-			j++;
-		}
-		write (1, "\n", 1);
-		i++;
-		j = 0;
-	}
-	if (strs[i] == NULL)
-		write (1, "null", 4);
-}
 
 static char	*create_cmd_path(char *path, char *cmd)
 {
@@ -74,5 +50,29 @@ char	*find_path(char *cmd, char **env)
 		i++;
 	}
 	free_matrice(paths);
+	return (NULL);
+}
+
+char	*check_direct_path(char *cmd)
+{
+	char	*new_cmd;
+	char	*path;
+
+	new_cmd = cmd;
+	while (*new_cmd)
+	{
+		if (*new_cmd == '/')
+		{
+			if (access(cmd, F_OK | X_OK) == 0)
+			{
+				path = ft_strdup(cmd);
+				if (!path)
+					return (NULL);
+				return (path);
+			}
+			return (NULL);
+		}
+		new_cmd++;
+	}
 	return (NULL);
 }
