@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:59:50 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/19 13:01:55 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/21 12:11:41 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ int	check_args(int ac)
 {
 	if (ac != 5)
 	{
-		perror("Invalid number of arguments");
+		ft_putstr_fd("Invalid number of arguments", 2);
 		return (1);
 	}
 	return (0);
@@ -33,4 +33,14 @@ int	check_files(char *infile, char *outfile, t_pipex *pipex)
 	if (pipex->infile == -1 || pipex->outfile == -1)
 		return (1);
 	return (0);
+}
+
+void	init_all(t_pipex *pipex)
+{
+	pipex->pipe_fd[0] = -1;
+	pipex->pipe_fd[1] = -1;
+	pipex->cmd1_args = NULL;
+	pipex->cmd2_args = NULL;
+	pipex->cmd1_path = NULL;
+	pipex->cmd2_args = NULL;
 }

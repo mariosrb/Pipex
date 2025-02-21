@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 10:46:10 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/19 13:04:46 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:39:22 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,6 @@ int		parent_cleanup(t_pipex *pipex, int id1, int id2);
 void	free_matrice(char **strs);
 void	free_pipex(t_pipex *pipex);
 void	free_cleanup(t_pipex *pipex);
+void	init_all(t_pipex *pipex);
 
 #endif

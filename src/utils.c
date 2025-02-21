@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:24 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/19 13:06:01 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:39:32 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,7 @@
 
 int	init_cmd(t_pipex *pipex, char *cmd1, char *cmd2)
 {
-	pipex->pipe_fd[0] = -1;
-	pipex->pipe_fd[1] = -1;
+	init_all(pipex);
 	pipex->cmd1_args = ft_split(cmd1, ' ');
 	pipex->cmd2_args = ft_split(cmd2, ' ');
 	if (!pipex->cmd1_args || !pipex->cmd2_args)
@@ -35,7 +34,8 @@ int	init_cmd(t_pipex *pipex, char *cmd1, char *cmd2)
 	if (!pipex->cmd1_path || !pipex->cmd2_path)
 	{
 		free_cleanup(pipex);
-		return (1);
+		ft_putstr_fd("Command not found\n", 2);
+		return (127);
 	}
 	return (0);
 }

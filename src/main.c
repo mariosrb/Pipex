@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/19 13:06:50 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/21 11:58:04 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 {
+	int	ret;
+	
 	if (!env || !*env)
 		return (1);
 	if (check_args(ac))
@@ -21,11 +23,9 @@ int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 	if (check_files(av[1], av[4], pipex))
 		return (1);
 	pipex->env = env;
-	if (init_cmd(pipex, av[2], av[3]))
-	{
-		free_pipex(pipex);
-		return (1);
-	}
+	ret = init_cmd(pipex, av[2], av[3]);
+	if (ret)
+		return (ret);
 	if (pipe(pipex->pipe_fd) == -1)
 	{
 		perror("Pipe creation failed");
@@ -57,7 +57,7 @@ int	first_child(t_pipex *pipex)
 	if (error_code != 0)
 	{
 		free_pipex(pipex);
-		exit(ERR_GENERAL);
+		exit(error_code);
 	}
 	execve(pipex->cmd1_path, pipex->cmd1_args, pipex->env);
 	free_pipex(pipex);
@@ -86,7 +86,7 @@ int	second_child(t_pipex *pipex)
 	if (error_code != 0)
 	{
 		free_pipex(pipex);
-		exit(ERR_GENERAL);
+		exit(error_code);
 	}
 	execve(pipex->cmd2_path, pipex->cmd2_args, pipex->env);
 	free_pipex(pipex);
@@ -98,9 +98,11 @@ int	main(int ac, char **av, char **env)
 	t_pipex	pipex;
 	int		id1;
 	int		id2;
+	int		ret;
 
-	if (setup_pipex(&pipex, ac, av, env))
-		return (1);
+	ret = setup_pipex(&pipex, ac, av, env);
+	if (ret)
+		return (ret);
 	id1 = fork();
 	if (id1 < 0)
 		return (free_pipex(&pipex), perror("Fork failed"), 1);
