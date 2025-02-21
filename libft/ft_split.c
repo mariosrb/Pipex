@@ -44,7 +44,12 @@ static char	*allocate_word(const char *s, char c)
 		return (NULL);
 	i = 0;
 	while (*s != c && *s)
-		w[i++] = *s++;
+	{
+		if (*s == '\'')
+			s++;
+		if (*s)
+			w[i++] = *s++;
+	}
 	w[i] = '\0';
 	return (w);
 }
