@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mario <mario@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/21 11:58:04 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/24 22:35:40 by mario            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,23 +35,23 @@ int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 	return (0);
 }
 
+static void handle_child_error(t_pipex *pipex, int error_code)
+{
+	close(pipex->pipe_fd[1]);
+	free_pipex(pipex);
+	exit(error_code);
+}
+
 int	first_child(t_pipex *pipex)
 {
 	int	error_code;
 
 	close(pipex->pipe_fd[0]);
-	if (dup2(pipex->infile, STDIN_FILENO) == -1)
-	{
-		close(pipex->pipe_fd[1]);
-		free_pipex(pipex);
-		exit(ERR_GENERAL);
-	}
+	if (pipex->infile != -1)
+		if (dup2(pipex->infile, STDIN_FILENO) == -1)
+			handle_child_error(pipex, ERR_GENERAL);
 	if (dup2(pipex->pipe_fd[1], STDOUT_FILENO) == -1)
-	{
-		close(pipex->pipe_fd[1]);
-		free_pipex(pipex);
-		exit(ERR_GENERAL);
-	}
+		handle_child_error(pipex, ERR_GENERAL);
 	close(pipex->pipe_fd[1]);
 	error_code = check_cmd_errors(pipex->cmd1_path, pipex->cmd1_args[0]);
 	if (error_code != 0)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mario <mario@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:24 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/21 11:39:32 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/21 21:24:55 by mario            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,16 @@ int	init_cmd(t_pipex *pipex, char *cmd1, char *cmd2)
 
 int	parent_cleanup(t_pipex *pipex, int id1, int id2)
 {
-	int	status;
-
+    int status1;
+	int	status2;
+	
 	close(pipex->pipe_fd[0]);
 	close(pipex->pipe_fd[1]);
-	waitpid(id1, NULL, 0);
-	waitpid(id2, &status, 0);
+	waitpid(id1, &status1, 0);
+    waitpid(id2, &status2, 0);
 	free_pipex(pipex);
-	if (WIFEXITED(status))
-		return (WEXITSTATUS(status));
+	if (WIFEXITED(status1))
+		return (WEXITSTATUS(status1));
 	return (ERR_GENERAL);
 }
 

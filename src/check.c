@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
+/*   By: mario <mario@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 11:59:50 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/21 12:11:41 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/21 21:25:41 by mario            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,12 +26,13 @@ int	check_files(char *infile, char *outfile, t_pipex *pipex)
 {
 	pipex->infile = open(infile, O_RDONLY);
 	if (pipex->infile == -1)
-		perror("Error opening infile\n");
+		perror(infile);
 	pipex->outfile = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (pipex->outfile == -1)
-		perror("Error opening outfile");
-	if (pipex->infile == -1 || pipex->outfile == -1)
+	{
+		perror(outfile);
 		return (1);
+	}
 	return (0);
 }
 
