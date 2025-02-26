@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:22 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/26 12:18:19 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/26 13:27:22 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,8 @@ char	*get_cmd_path(char *cmd, char **env)
 {
 	char	*path;
 
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
 	path = check_direct_path(cmd);
 	if (!path)
 		path = find_path(cmd, env);
