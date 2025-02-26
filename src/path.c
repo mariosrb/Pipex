@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:22 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/26 13:27:22 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:57:36 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,12 @@ char	*find_path(char *cmd, char **env)
 	int		i;
 
 	i = 0;
+	if (!env || !*env || !cmd)
+		return (NULL);
 	while (env[i] && ft_strncmp(env[i], "PATH=", 5) != 0)
 		i++;
+	if (!env[i])
+		return (NULL);
 	paths = ft_split(env[i] + 5, ':');
 	if (!paths)
 		return (NULL);
@@ -63,10 +67,7 @@ char	*find_path(char *cmd, char **env)
 	{
 		final_path = create_cmd_path(paths[i], cmd);
 		if (access(final_path, F_OK | X_OK) == 0)
-		{
-			free_matrice(paths);
-			return (final_path);
-		}
+			return (free_matrice(paths), final_path);
 		free(final_path);
 		i++;
 	}

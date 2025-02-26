@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/26 10:35:08 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/26 16:43:31 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,6 @@ int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 {
 	int	ret;
 
-	if (!env || !*env)
-		return (1);
 	if (check_args(ac))
 		return (1);
 	if (check_files(av[1], av[4], pipex))
