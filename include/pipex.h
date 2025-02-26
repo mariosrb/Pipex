@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/18 10:46:10 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/21 11:39:22 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/26 11:55:05 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,18 @@ typedef struct s_pipex
 // parsing
 char	*find_path(char *cmd, char **env);
 
+// error
+int		handle_split_error(t_pipex *pipex);
+int		handle_empty_cmd(t_pipex *pipex);
+int		handle_path_error(t_pipex *pipex);
+
 // check
 int		check_args(int ac);
 int		check_cmd_errors(char *cmd_path, char *cmd_name);
 int		check_files(char *infile, char *outfile, t_pipex *pipex);
+char	*get_cmd_path(char *cmd, char **env);
 char	*check_direct_path(char *cmd);
+int		is_empty_cmd(char *cmd);
 
 // utils
 int		init_cmd(t_pipex *pipex, char *cmd1, char *cmd2);

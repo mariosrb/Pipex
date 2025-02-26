@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/19 11:15:33 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/21 11:34:21 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:59:33 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,4 +27,28 @@ int	check_cmd_errors(char *cmd_path, char *cmd_name)
 		return (ERR_CMD_NOT_EXECUTABLE);
 	}
 	return (0);
+}
+
+int	handle_split_error(t_pipex *pipex)
+{
+	if (pipex->cmd1_args)
+		free_matrice(pipex->cmd1_args);
+	if (pipex->cmd2_args)
+		free_matrice(pipex->cmd2_args);
+	return (1);
+}
+
+int	handle_empty_cmd(t_pipex *pipex)
+{
+	free_matrice(pipex->cmd1_args);
+	free_matrice(pipex->cmd2_args);
+	ft_putstr_fd("Command not found\n", 2);
+	return (127);
+}
+
+int	handle_path_error(t_pipex *pipex)
+{
+	free_cleanup(pipex);
+	ft_putstr_fd("Command not found\n", 2);
+	return (127);
 }

@@ -6,7 +6,7 @@
 /*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:22 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/19 13:01:11 by mdodevsk         ###   ########.fr       */
+/*   Updated: 2025/02/26 12:18:19 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,31 @@ static char	*create_cmd_path(char *path, char *cmd)
 	char	*final;
 	char	*tmp;
 
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
 	tmp = ft_strjoin(path, "/");
 	if (!tmp)
 		return (NULL);
 	final = ft_strjoin(tmp, cmd);
 	free(tmp);
 	return (final);
+}
+
+int	is_empty_cmd(char *cmd)
+{
+	if (cmd && cmd[0] == '\0')
+		return (1);
+	return (0);
+}
+
+char	*get_cmd_path(char *cmd, char **env)
+{
+	char	*path;
+
+	path = check_direct_path(cmd);
+	if (!path)
+		path = find_path(cmd, env);
+	return (path);
 }
 
 char	*find_path(char *cmd, char **env)
@@ -58,6 +77,8 @@ char	*check_direct_path(char *cmd)
 	char	*new_cmd;
 	char	*path;
 
+	if (!cmd || cmd[0] == '\0')
+		return (NULL);
 	new_cmd = cmd;
 	while (*new_cmd)
 	{

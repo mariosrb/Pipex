@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mario <mario@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:24 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/21 21:24:55 by mario            ###   ########.fr       */
+/*   Updated: 2025/02/26 12:59:24 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,37 +18,25 @@ int	init_cmd(t_pipex *pipex, char *cmd1, char *cmd2)
 	pipex->cmd1_args = ft_split(cmd1, ' ');
 	pipex->cmd2_args = ft_split(cmd2, ' ');
 	if (!pipex->cmd1_args || !pipex->cmd2_args)
-	{
-		if (pipex->cmd1_args)
-			free_matrice(pipex->cmd1_args);
-		if (pipex->cmd2_args)
-			free_matrice(pipex->cmd2_args);
-		return (1);
-	}
-	pipex->cmd1_path = check_direct_path(pipex->cmd1_args[0]);
-	if (!pipex->cmd1_path)
-		pipex->cmd1_path = find_path(pipex->cmd1_args[0], pipex->env);
-	pipex->cmd2_path = check_direct_path(pipex->cmd2_args[0]);
-	if (!pipex->cmd2_path)
-		pipex->cmd2_path = find_path(pipex->cmd2_args[0], pipex->env);
+		return (handle_split_error(pipex));
+	if (is_empty_cmd(pipex->cmd1_args[0]) || is_empty_cmd(pipex->cmd2_args[0]))
+		return (handle_empty_cmd(pipex));
+	pipex->cmd1_path = get_cmd_path(pipex->cmd1_args[0], pipex->env);
+	pipex->cmd2_path = get_cmd_path(pipex->cmd2_args[0], pipex->env);
 	if (!pipex->cmd1_path || !pipex->cmd2_path)
-	{
-		free_cleanup(pipex);
-		ft_putstr_fd("Command not found\n", 2);
-		return (127);
-	}
+		return (handle_path_error(pipex));
 	return (0);
 }
 
 int	parent_cleanup(t_pipex *pipex, int id1, int id2)
 {
-    int status1;
+	int	status1;
 	int	status2;
-	
+
 	close(pipex->pipe_fd[0]);
 	close(pipex->pipe_fd[1]);
 	waitpid(id1, &status1, 0);
-    waitpid(id2, &status2, 0);
+	waitpid(id2, &status2, 0);
 	free_pipex(pipex);
 	if (WIFEXITED(status1))
 		return (WEXITSTATUS(status1));

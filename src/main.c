@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mario <mario@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mdodevsk <mdodevsk@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/14 10:28:20 by mdodevsk          #+#    #+#             */
-/*   Updated: 2025/02/24 22:35:40 by mario            ###   ########.fr       */
+/*   Updated: 2025/02/26 10:35:08 by mdodevsk         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 {
 	int	ret;
-	
+
 	if (!env || !*env)
 		return (1);
 	if (check_args(ac))
@@ -35,7 +35,7 @@ int	setup_pipex(t_pipex *pipex, int ac, char **av, char **env)
 	return (0);
 }
 
-static void handle_child_error(t_pipex *pipex, int error_code)
+static void	handle_child_error(t_pipex *pipex, int error_code)
 {
 	close(pipex->pipe_fd[1]);
 	free_pipex(pipex);
